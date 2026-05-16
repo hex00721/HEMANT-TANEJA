@@ -347,8 +347,8 @@ export default function AdminPage() {
     <main className="min-h-screen bg-black text-white">
       <Navbar />
 
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-28 sm:pt-32 pb-20 px-3 sm:px-4 overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto overflow-hidden">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-10">
             ADMIN DASHBOARD
           </h1>
@@ -375,7 +375,7 @@ export default function AdminPage() {
               Add Game
             </h2>
 
-            <div className="grid md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               <input
                 type="text"
                 placeholder="Game Name"
@@ -417,38 +417,41 @@ export default function AdminPage() {
                 <option value="EUR">€ EUR</option>
                 <option value="GBP">£ GBP</option>
               </select>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  setGameForm({
-                    ...gameForm,
-                    file: e.target.files?.[0] || null,
-                  })
-                }
-                className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
-              />
+              <div className="flex flex-col gap-2">
+  <label className="text-sm text-gray-400">
+    Upload Image
+  </label>
 
-              <input
-                type="text"
-                placeholder="Game Image URL"
-                value={gameForm.image}
-                onChange={(e) =>
-                  setGameForm({ ...gameForm, image: e.target.value })
-                }
-                className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  setGameForm({
-                    ...gameForm,
-                    file: e.target.files?.[0] || null,
-                  })
-                }
-                className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
-              />
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) =>
+      setGameForm({
+        ...gameForm,
+        file: e.target.files?.[0] || null,
+      })
+    }
+    className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
+  />
+</div>
+
+<div className="flex flex-col gap-2">
+  <label className="text-sm text-gray-400">
+    OR Image URL
+  </label>
+
+  <input
+    type="text"
+    placeholder="https://example.com/image.jpg"
+    value={gameForm.image}
+    onChange={(e) =>
+      setGameForm({ ...gameForm, image: e.target.value })
+    }
+    className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
+  />
+</div>
+
+             
 
               <input
                 type="text"
@@ -497,7 +500,7 @@ export default function AdminPage() {
               Add Product
             </h2>
 
-            <div className="grid md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               <input
                 type="text"
                 placeholder="Product Name"
@@ -574,7 +577,7 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
             {products.map((product) => (
               <div
                 key={product.id}
@@ -681,7 +684,7 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                   {order.items?.map((item: any) => (
                     <div
                       key={item.id}
