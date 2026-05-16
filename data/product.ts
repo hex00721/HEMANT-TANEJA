@@ -1,0 +1,38 @@
+export const products = [
+  {
+    id: 1,
+    name: "RGB Keyboard",
+    price: 129,
+    rating: 4.8,
+    category: "Keyboard",
+    image: "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae",
+    description: "Mechanical RGB keyboard with premium switches.",
+  },
+  {
+    id: 2,
+    name: "Gaming Mouse",
+    price: 79,
+    rating: 4.9,
+    category: "Mouse",
+    image: "https://images.unsplash.com/photo-1527814050087-3793815479db",
+    description: "Ultra-light gaming mouse with RGB lighting.",
+  },
+  {
+    id: 3,
+    name: "RGB Headset",
+    price: 149,
+    rating: 4.7,
+    category: "Headset",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+    description: "Surround sound gaming headset.",
+  },
+  {
+    id: 4,
+    name: "Gaming PC",
+    price: 2499,
+    rating: 5.0,
+    category: "PC",
+    image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7",
+    description: "Ultimate RTX gaming machine.",
+  },
+]
