@@ -57,7 +57,7 @@ export function Hero() {
   loop
   muted
   playsInline
-  className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
+  className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
 >
   <source
     src="https://videos.pexels.com/video-files/3141211/3141211-uhd_2560_1440_25fps.mp4"
@@ -91,7 +91,7 @@ export function Hero() {
   ))}
 </div>
 
-<div className="absolute inset-0 bg-gradient-to-b from-black/30 via-[var(--rgb-primary)]/20 to-black/70 pointer-events-none" />
+<div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-black pointer-events-none" />
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse" />
@@ -113,7 +113,7 @@ export function Hero() {
           </div>
 
           {/* Main Heading */}
-          <h1 className="font-[family-name:var(--font-orbitron)] text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
+          <h1 className="font-[family-name:var(--font-orbitron)] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
             <span className="block text-foreground">DOMINATE</span>
             <span className="block text-primary neon-text">THE GAME</span>
           </h1>
@@ -144,7 +144,7 @@ export function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-16 max-w-xl mx-auto">
+          <div className="grid grid-cols-3 gap-8 pt-16 max-w-xl mx-auto">
             {[
               { value: "50K+", label: "Players" },
               { value: "99%", label: "Satisfaction" },
