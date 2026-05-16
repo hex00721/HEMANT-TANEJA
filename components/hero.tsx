@@ -57,7 +57,7 @@ export function Hero() {
   loop
   muted
   playsInline
-  className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+  className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
 >
   <source
     src="https://videos.pexels.com/video-files/3141211/3141211-uhd_2560_1440_25fps.mp4"

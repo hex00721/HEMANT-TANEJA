@@ -159,7 +159,7 @@ export default function AdminPage() {
     if (
       !gameForm.name ||
       !gameForm.price ||
-      !gameForm.image ||
+      (!gameForm.image && !gameForm.file) ||
       !gameForm.genre ||
       !gameForm.description
     ) {
@@ -205,7 +205,7 @@ export default function AdminPage() {
     if (
       !productForm.name ||
       !productForm.price ||
-      !productForm.image ||
+     (!productForm.image && !productForm.file) ||
       !productForm.category
     ) {
       showToast(toasts.fillAllFields)
