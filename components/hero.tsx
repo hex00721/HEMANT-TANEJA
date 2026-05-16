@@ -113,7 +113,7 @@ export function Hero() {
           </div>
 
           {/* Main Heading */}
-          <h1 className="font-[family-name:var(--font-orbitron)] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
+          <h1 className="font-[family-name:var(--font-orbitron)] text-3xl sm:text-4xl md:text-5xl sm:text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
             <span className="block text-foreground">DOMINATE</span>
             <span className="block text-primary neon-text">THE GAME</span>
           </h1>
@@ -144,7 +144,7 @@ export function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 pt-16 max-w-xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-16 max-w-xl mx-auto">
             {[
               { value: "50K+", label: "Players" },
               { value: "99%", label: "Satisfaction" },

@@ -11,7 +11,7 @@ export default function AboutPage() {
 
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-6">
+          <h1 className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-6">
             ABOUT HYPERBYTE
           </h1>
 
@@ -20,7 +20,7 @@ export default function AboutPage() {
             creators, streamers, and RGB lovers.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { title: "Performance", icon: Cpu },
               { title: "RGB Power", icon: Zap },

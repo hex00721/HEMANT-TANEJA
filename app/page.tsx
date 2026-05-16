@@ -26,7 +26,7 @@ export default function HomePage() {
 
       <FeaturedCategories />
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-10 px-8">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-10 px-8">
         {[
           {
             name: "RGB Keyboard",

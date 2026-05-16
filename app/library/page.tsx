@@ -53,7 +53,7 @@ export default function LibraryPage() {
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
 
-          <h1 className="text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12">
+          <h1 className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12">
             MY GAME LIBRARY
           </h1>
 

@@ -91,7 +91,7 @@ export default function LoginPage() {
       </button>
       <div className="relative z-10 w-full max-w-md bg-zinc-900/80 backdrop-blur-xl border border-[var(--rgb-primary)] rounded-3xl p-8 shadow-[0_0_40px_var(--rgb-primary)]">
         <h1
-          className="text-5xl font-bold text-center mb-8"
+          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8"
           style={{
             color: "var(--rgb-primary)",
             textShadow: "0 0 20px var(--rgb-primary)",

@@ -24,8 +24,8 @@ export function Newsletter() {
       <div className="absolute inset-0 cyber-grid opacity-20 pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-[40px] p-10 text-center shadow-[0_0_40px_var(--rgb-primary)]">
-          <h2 className="text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-6">
+        <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-[40px] p-5 sm:p-8 md:p-10 text-center shadow-[0_0_40px_var(--rgb-primary)]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-6">
             JOIN THE HYPERBYTE ARMY
           </h2>
 

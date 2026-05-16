@@ -135,7 +135,7 @@ export default function ShopPage() {
           <span className="inline-block font-[family-name:var(--font-rajdhani)] text-sm font-semibold uppercase tracking-widest text-primary mb-4">
             Gaming Arsenal
           </span>
-          <h1 className="font-[family-name:var(--font-orbitron)] text-5xl sm:text-6xl font-bold mb-6">
+          <h1 className="font-[family-name:var(--font-orbitron)] text-3xl sm:text-4xl md:text-5xl sm:text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold mb-6">
             <span className="text-foreground">THE</span>
             <span className="text-primary neon-text ml-3">SHOP</span>
           </h1>
@@ -197,7 +197,7 @@ export default function ShopPage() {
 
           {/* Products Grid */}
           <Reveal>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} {...product} />
               ))}

@@ -41,7 +41,7 @@ export default function CustomizerPage() {
 
   return (
     <div
-      className="min-h-screen bg-black text-white p-10"
+      className="min-h-screen bg-black text-white p-5 sm:p-8 md:p-10"
       
       style={{
         background: "#000000",
@@ -96,7 +96,7 @@ export default function CustomizerPage() {
       <div className="text-center mb-12">
 
         <h1
-          className="text-6xl font-bold mb-4"
+          className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold mb-4"
           style={{
             color: color,
             textShadow: `0 0 20px ${color}`,
@@ -193,7 +193,7 @@ export default function CustomizerPage() {
       {/* PRODUCTS */}
       <div
         ref={captureRef}
-        className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 bg-black p-10 rounded-3xl"
+        className="grid md:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 bg-black p-5 sm:p-8 md:p-10 rounded-3xl"
       >
         {[
           {

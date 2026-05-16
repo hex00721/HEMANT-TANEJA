@@ -53,7 +53,7 @@ export default function ProductPage() {
           />
 
           <div>
-            <h1 className="text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-6">
+            <h1 className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-6">
               {product.name}
             </h1>
 
@@ -62,7 +62,7 @@ export default function ProductPage() {
             </p>
 
             <div className="space-y-4 mb-8">
-              <p className="text-5xl font-bold text-[var(--rgb-primary)]">
+              <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--rgb-primary)]">
                 ${product.price}
               </p>
 

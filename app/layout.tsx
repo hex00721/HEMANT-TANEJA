@@ -59,6 +59,10 @@ export default function RootLayout({
     <html lang="en"
       className={`${orbitron.variable} ${rajdhani.variable} bg-background`}>
       <head>
+        <meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
         <script
           dangerouslySetInnerHTML={{
             __html: `

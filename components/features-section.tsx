@@ -36,14 +36,14 @@ export function FeaturesSection() {
           <span className="inline-block font-[family-name:var(--font-rajdhani)] text-sm font-semibold uppercase tracking-widest text-primary">
             Why Choose HYPERBYTE
           </span>
-          <h2 className="font-[family-name:var(--font-orbitron)] text-4xl sm:text-5xl font-bold">
+          <h2 className="font-[family-name:var(--font-orbitron)] text-4xl sm:text-3xl sm:text-4xl md:text-5xl font-bold">
             <span className="text-foreground">ENGINEERED FOR</span>
             <span className="text-primary neon-text ml-3">VICTORY</span>
           </h2>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <div
               key={feature.title}

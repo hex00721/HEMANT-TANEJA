@@ -37,11 +37,11 @@ export default function GamesPage() {
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
 
-          <h1 className="text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12">
+          <h1 className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12">
             AAA GAMES STORE
           </h1>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {games.map((game) => (
               <Link
                 key={game.id}

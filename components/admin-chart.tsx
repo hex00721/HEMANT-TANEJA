@@ -97,7 +97,7 @@ export default function AdminChart({
         </ResponsiveContainer>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
         <div className="bg-black rounded-2xl p-5 border border-[var(--rgb-primary)]">
           <p className="text-gray-400 mb-2">Total Revenue</p>
           <h3 className="text-3xl font-bold text-[var(--rgb-primary)]">

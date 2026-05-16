@@ -11,6 +11,7 @@ import toasts from "@/config/toasts.json"
 import Link from "next/link"
 import { useRecentlyViewed } from "@/context/recently-viewed-context"
 
+
 interface ProductCardProps {
   id: string
   name: string

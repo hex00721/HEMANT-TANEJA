@@ -51,7 +51,7 @@ export function FeaturedProducts() {
           <span className="inline-block font-[family-name:var(--font-rajdhani)] text-sm font-semibold uppercase tracking-widest text-primary">
             Featured Gear
           </span>
-          <h2 className="font-[family-name:var(--font-orbitron)] text-4xl sm:text-5xl font-bold">
+          <h2 className="font-[family-name:var(--font-orbitron)] text-4xl sm:text-3xl sm:text-4xl md:text-5xl font-bold">
             <span className="text-foreground">ELITE</span>
             <span className="text-primary neon-text ml-3">COLLECTION</span>
           </h2>
@@ -61,7 +61,7 @@ export function FeaturedProducts() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}

@@ -19,7 +19,7 @@ export default function WishlistPage() {
         <div className="absolute top-20 left-20 w-[400px] h-[400px] bg-[var(--rgb-primary)]/20 rounded-full blur-[120px]" />
 
         <div className="relative z-10 max-w-7xl mx-auto">
-          <h1 className="text-5xl font-bold text-[var(--rgb-primary)] mb-4 neon-text">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--rgb-primary)] mb-4 neon-text">
             MY WISHLIST
           </h1>
 
@@ -40,7 +40,7 @@ export default function WishlistPage() {
               </p>
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {wishlistItems.map((item) => (
                 <div
                   key={item.id}

@@ -186,7 +186,7 @@ export default function CheckoutPage() {
       <Navbar />
 
       <section className="pt-32 pb-20 px-4">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-5 sm:p-8 md:p-10">
           <div className="bg-zinc-900 p-8 rounded-3xl border border-[var(--rgb-primary)] shadow-[0_0_30px_var(--rgb-primary)]">
             <h1 className="text-4xl font-bold bg-[var(--rgb-primary)]/20
  mb-8">
@@ -387,7 +387,7 @@ export default function CheckoutPage() {
 
       {success && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[99999]">
-          <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-10 text-center shadow-[0_0_40px_var(--rgb-primary)]">
+          <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-5 sm:p-8 md:p-10 text-center shadow-[0_0_40px_var(--rgb-primary)]">
             <h2 className="text-4xl font-bold bg-[var(--rgb-primary)]/20
  mb-4">
               Order Placed!

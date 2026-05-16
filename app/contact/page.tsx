@@ -35,7 +35,7 @@ export default function ContactPage() {
           <span className="inline-block font-[family-name:var(--font-rajdhani)] text-sm font-semibold uppercase tracking-widest text-primary mb-4">
             Get In Touch
           </span>
-          <h1 className="font-[family-name:var(--font-orbitron)] text-5xl sm:text-6xl font-bold mb-6">
+          <h1 className="font-[family-name:var(--font-orbitron)] text-3xl sm:text-4xl md:text-5xl sm:text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold mb-6">
             <span className="text-foreground">CONTACT</span>
             <span className="text-primary neon-text ml-3">US</span>
           </h1>
@@ -48,7 +48,7 @@ export default function ContactPage() {
       {/* Contact Section */}
       <section className="relative py-12">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Contact Info */}
             <div className="space-y-6">
               <div className="glass rounded-2xl neon-border p-6 hover:scale-[1.02] transition-all duration-300">

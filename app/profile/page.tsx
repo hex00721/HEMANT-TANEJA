@@ -128,11 +128,11 @@ export default function ProfilePage() {
 
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-10">
             USER DASHBOARD
           </h1>
 
-          <div className="grid lg:grid-cols-[280px_1fr] gap-10 items-start">
+          <div className="grid lg:grid-cols-[280px_1fr] gap-5 sm:p-8 md:p-10 items-start">
             <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-8 shadow-[0_0_30px_var(--rgb-primary)] h-fit ">
               <div className="w-28 h-28 rounded-full bg-[var(--rgb-primary)] text-black flex items-center justify-center mx-auto mb-6">
                 <User className="w-14 h-14" />
@@ -217,7 +217,7 @@ export default function ProfilePage() {
                       Recently Viewed
                     </h2>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                       {viewed.map((product) => (
                         <div
                           key={product.id}
@@ -270,7 +270,7 @@ export default function ProfilePage() {
                   </div>
 
                   {orders.length === 0 ? (
-                    <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-10">
+                    <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-5 sm:p-8 md:p-10">
                       <p className="text-gray-400">No orders found.</p>
                     </div>
                   ) : (
@@ -306,7 +306,7 @@ export default function ProfilePage() {
                             </div>
                           </div>
 
-                          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                          <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {order.items?.map((item: any) => (
                               <div>
                                 <h3 className="font-bold">{item.name}</h3>
@@ -353,11 +353,11 @@ export default function ProfilePage() {
                     .flatMap((order) => order.items || [])
                     .filter((item: any) => item.category === "Game")
                     .length === 0 ? (
-                    <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-10">
+                    <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-5 sm:p-8 md:p-10">
                       <p className="text-gray-400">No games purchased yet.</p>
                     </div>
                   ) : (
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                       {orders
                         .flatMap((order) => order.items || [])
                         .filter((item: any) => item.category === "Game")
@@ -388,7 +388,7 @@ export default function ProfilePage() {
               )}
 
               {activeTab === "Wishlist" && (
-                <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-10">
+                <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-5 sm:p-8 md:p-10">
                   <h2 className="text-4xl font-bold text-[var(--rgb-primary)] mb-4">
                     Wishlist
                   </h2>
@@ -406,7 +406,7 @@ export default function ProfilePage() {
                 </div>
               )}
               {activeTab === "Settings" && (
-                <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-10">
+                <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-5 sm:p-8 md:p-10">
                   <h2 className="text-4xl font-bold text-[var(--rgb-primary)] mb-6">
                     Settings
                   </h2>

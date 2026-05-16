@@ -349,7 +349,7 @@ export default function AdminPage() {
 
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-10">
             ADMIN DASHBOARD
           </h1>
 
@@ -375,7 +375,7 @@ export default function AdminPage() {
               Add Game
             </h2>
 
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <input
                 type="text"
                 placeholder="Game Name"
@@ -574,7 +574,7 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {products.map((product) => (
               <div
                 key={product.id}
@@ -681,7 +681,7 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {order.items?.map((item: any) => (
                     <div
                       key={item.id}

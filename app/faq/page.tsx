@@ -30,7 +30,7 @@ export default function FAQPage() {
 
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12 text-center">
+          <h1 className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12 text-center">
             FAQ
           </h1>
 

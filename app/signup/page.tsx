@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation"
 import { sendEmailVerification } from "firebase/auth"
 import { useToast } from "@/components/toast"
 import toasts from "@/config/toasts.json"
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { FcGoogle } from "react-icons/fc"
 
 export default function SignupPage() {
   const { showToast } = useToast()
@@ -19,7 +21,7 @@ export default function SignupPage() {
 
   const router = useRouter()
   const handleSignup = async () => {
-    
+
     if (!name || !email || !password) {
       showToast(toasts.fillAllFields)
       return
@@ -43,7 +45,7 @@ export default function SignupPage() {
         createdAt: new Date(),
       })
 
-     showToast(toasts.checkVerificationMail)
+      showToast(toasts.checkVerificationMail)
       router.push("/login")
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
@@ -53,6 +55,18 @@ export default function SignupPage() {
       } else {
         showToast(toasts.signupFailed)
       }
+    }
+
+  }
+  const handleGoogleSignup = async () => {
+    try {
+      const provider = new GoogleAuthProvider()
+      await signInWithPopup(auth, provider)
+
+      showToast(toasts.loginSuccess)
+      router.push("/")
+    } catch (error: any) {
+      showToast(error.message || "Google signup failed")
     }
   }
 
@@ -78,7 +92,7 @@ export default function SignupPage() {
       </button>
       <div className="relative z-10 w-full max-w-md bg-zinc-900/80 backdrop-blur-xl  border border-[var(--rgb-primary)] rounded-3xl p-8 shadow-[0_0_40px_var(--rgb-primary)]">
 
-        <h1 className="text-5xl font-bold bg-[var(--rgb-primary)]/20
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-[var(--rgb-primary)]/20
  text-center mb-8">
           SIGNUP
         </h1>
@@ -114,6 +128,13 @@ export default function SignupPage() {
             className="w-full py-4 rounded-2xl bg-[var(--rgb-primary)] text-black font-bold text-xl hover:scale-105 transition-all duration-300 shadow-[0_0_30px_var(--rgb-primary)]"
           >
             Create Account
+          </button>
+          <button
+            onClick={handleGoogleSignup}
+            className="w-full py-4 rounded-2xl border border-[var(--rgb-primary)] flex items-center justify-center gap-4 text-white font-bold text-xl hover:bg-zinc-900 transition-all duration-300"
+          >
+            <FcGoogle size={28} />
+            Sign up with Google
           </button>
 
           <p className="text-center text-gray-400">

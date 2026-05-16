@@ -19,7 +19,7 @@ export default function GalleryPage() {
 
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-6xl font-bold text-center text-[var(--rgb-primary)] neon-text mb-6">
+          <h1 className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold text-center text-[var(--rgb-primary)] neon-text mb-6">
             SETUP GALLERY
           </h1>
 

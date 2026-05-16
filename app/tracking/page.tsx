@@ -20,9 +20,9 @@ export default function TrackingPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto">
 
-          <div className="bg-zinc-900/80 backdrop-blur-xl border border-[var(--rgb-primary)] rounded-3xl p-10 shadow-[0_0_40px_var(--rgb-primary)]">
+          <div className="bg-zinc-900/80 backdrop-blur-xl border border-[var(--rgb-primary)] rounded-3xl p-5 sm:p-8 md:p-10 shadow-[0_0_40px_var(--rgb-primary)]">
 
-            <h1 className="text-5xl font-bold bg-[var(--rgb-primary)]/20
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-[var(--rgb-primary)]/20
  text-center mb-4">
               ORDER TRACKING
             </h1>

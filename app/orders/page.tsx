@@ -45,7 +45,7 @@ export default function OrdersPage() {
 
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--rgb-primary)] neon-text mb-10">
             Order History
           </h1>
 
@@ -84,7 +84,7 @@ export default function OrdersPage() {
                     </div>
                   </div>
 
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {order.items?.map((item: any) => (
                       <div
                         key={item.id}
