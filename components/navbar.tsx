@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import type { User as FirebaseUser } from "firebase/auth"
 import { Menu, X, ShoppingCart, Hexagon, User, Heart } from "lucide-react"
 import { useCart } from "@/context/cart-context"
 import { onAuthStateChanged, signOut } from "firebase/auth"
@@ -19,7 +20,7 @@ const navLinks = [
 
 export function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<FirebaseUser | null>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [userOpen, setUserOpen] = useState(false)
@@ -36,8 +37,13 @@ export function Navbar() {
         return
       }
 
-      const adminSnap = await getDoc(doc(db, "admins", currentUser.uid))
-      setIsAdmin(adminSnap.exists())
+      try {
+        const adminSnap = await getDoc(doc(db, "admins", currentUser.uid))
+        setIsAdmin(adminSnap.exists())
+      } catch (error) {
+        console.error("Admin check failed:", error)
+        setIsAdmin(false)
+      }
     })
 
     return () => unsubscribe()
@@ -153,11 +159,7 @@ export function Navbar() {
               className="lg:hidden p-2 text-muted-foreground hover:text-primary transition-colors duration-300"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -201,8 +203,14 @@ export function Navbar() {
       </div>
 
       {cartOpen && (
-        <div className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-sm flex justify-end">
-          <div className="w-[90%] sm:w-full max-w-md h-full bg-zinc-950 border-l-2 border-[var(--rgb-primary)] p-4 sm:p-6 shadow-[0_0_50px_var(--rgb-primary)] rounded-l-[30px] sm:rounded-l-[40px] overflow-y-auto">
+        <div
+          onClick={() => setCartOpen(false)}
+          className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-sm flex justify-end"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-[90%] sm:w-full max-w-md h-full bg-zinc-950 border-l-2 border-[var(--rgb-primary)] p-4 sm:p-6 shadow-[0_0_50px_var(--rgb-primary)] rounded-l-[30px] sm:rounded-l-[40px] overflow-y-auto"
+          >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl sm:text-3xl font-bold text-[var(--rgb-primary)]">
                 Your Cart
@@ -227,6 +235,7 @@ export function Navbar() {
                   >
                     <img
                       src={item.image}
+                      alt={item.name}
                       className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
                     />
 
@@ -274,92 +283,184 @@ export function Navbar() {
         </div>
       )}
 
-      {userOpen && (
-        <div className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-sm flex justify-start">
-          <div className="w-[85%] sm:w-full max-w-sm h-full bg-zinc-950 border-r-2 border-[var(--rgb-primary)] p-4 sm:p-6 shadow-[0_0_50px_var(--rgb-primary)] rounded-r-[30px] sm:rounded-r-[40px] overflow-y-auto">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[var(--rgb-primary)]">
-                User Panel
-              </h2>
+     {userOpen && (
+  <div
+    onClick={() => setUserOpen(false)}
+    className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-md"
+  >
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="
+        fixed top-0 left-0
+        h-screen
+        w-[300px] sm:w-[340px]
+        bg-gradient-to-b from-zinc-950 via-black to-zinc-950
+        border-r border-[var(--rgb-primary)]
+        shadow-[0_0_40px_var(--rgb-primary)]
+        p-6
+        flex flex-col
+        animate-[slideInLeft_.35s_ease]
+      "
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="text-3xl font-bold text-[var(--rgb-primary)]">
+            User Panel
+          </h2>
 
-              <button
-                onClick={() => setUserOpen(false)}
-                className="text-white hover:text-[var(--rgb-primary)] text-3xl"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  onClick={() => setUserOpen(false)}
-                  className="block p-4 rounded-xl bg-red-500 text-white font-bold hover:bg-red-600 transition-all"
-                >
-                  Admin Panel
-                </Link>
-              )}
-
-              <Link
-                href="/profile"
-                onClick={() => setUserOpen(false)}
-                className="block p-4 rounded-xl bg-zinc-900 hover:bg-[var(--rgb-primary)] hover:text-black transition-all"
-              >
-                Profile Dashboard
-              </Link>
-
-              <Link
-                href="/tracking"
-                onClick={() => setUserOpen(false)}
-                className="block p-4 rounded-xl bg-zinc-900 hover:bg-[var(--rgb-primary)] hover:text-black transition-all"
-              >
-                Track Orders
-              </Link>
-
-              <Link
-                href="/wishlist"
-                onClick={() => setUserOpen(false)}
-                className="block p-4 rounded-xl bg-zinc-900 hover:bg-[var(--rgb-primary)] hover:text-black transition-all"
-              >
-                Wishlist
-              </Link>
-
-              {!user && (
-                <>
-                  <Link
-                    href="/login"
-                    onClick={() => setUserOpen(false)}
-                    className="block p-4 rounded-xl bg-zinc-900 hover:bg-[var(--rgb-primary)] hover:text-black transition-all"
-                  >
-                    Login
-                  </Link>
-
-                  <Link
-                    href="/signup"
-                    onClick={() => setUserOpen(false)}
-                    className="block p-4 rounded-xl bg-zinc-900 hover:bg-[var(--rgb-primary)] hover:text-black transition-all"
-                  >
-                    Create Account
-                  </Link>
-                </>
-              )}
-
-              {user && (
-                <button
-                  onClick={() => {
-                    signOut(auth)
-                    setUserOpen(false)
-                  }}
-                  className="w-full text-left p-4 rounded-xl bg-red-500 text-white font-bold hover:bg-red-600 transition-all"
-                >
-                  Logout
-                </button>
-              )}
-            </div>
-          </div>
+          <p className="text-sm text-gray-400 mt-1">
+            Welcome back
+          </p>
         </div>
+
+        <button
+          onClick={() => setUserOpen(false)}
+          className="
+            w-10 h-10
+            rounded-xl
+            bg-zinc-900
+            hover:bg-[var(--rgb-primary)]
+            hover:text-black
+            transition-all duration-300
+            flex items-center justify-center
+          "
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Links */}
+      <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-1">
+        {isAdmin && (
+          <Link
+            href="/admin"
+            onClick={() => setUserOpen(false)}
+            className="
+              p-4 rounded-2xl
+              bg-red-500
+              text-white
+              font-bold
+              hover:scale-[1.02]
+              hover:bg-red-600
+              transition-all duration-300
+            "
+          >
+            Admin Panel
+          </Link>
+        )}
+
+        <Link
+          href="/profile"
+          onClick={() => setUserOpen(false)}
+          className="
+            p-4 rounded-2xl
+            bg-zinc-900
+            border border-zinc-800
+            hover:border-[var(--rgb-primary)]
+            hover:bg-[var(--rgb-primary)]/10
+            hover:text-[var(--rgb-primary)]
+            transition-all duration-300
+          "
+        >
+          Profile Dashboard
+        </Link>
+
+        <Link
+          href="/tracking"
+          onClick={() => setUserOpen(false)}
+          className="
+            p-4 rounded-2xl
+            bg-zinc-900
+            border border-zinc-800
+            hover:border-[var(--rgb-primary)]
+            hover:bg-[var(--rgb-primary)]/10
+            hover:text-[var(--rgb-primary)]
+            transition-all duration-300
+          "
+        >
+          Track Orders
+        </Link>
+
+        <Link
+          href="/wishlist"
+          onClick={() => setUserOpen(false)}
+          className="
+            p-4 rounded-2xl
+            bg-zinc-900
+            border border-zinc-800
+            hover:border-[var(--rgb-primary)]
+            hover:bg-[var(--rgb-primary)]/10
+            hover:text-[var(--rgb-primary)]
+            transition-all duration-300
+          "
+        >
+          Wishlist
+        </Link>
+
+        {!user && (
+          <>
+            <Link
+              href="/login"
+              onClick={() => setUserOpen(false)}
+              className="
+                p-4 rounded-2xl
+                text-center
+                border border-[var(--rgb-primary)]
+                text-[var(--rgb-primary)]
+                hover:bg-[var(--rgb-primary)]
+                hover:text-black
+                transition-all duration-300
+              "
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/signup"
+              onClick={() => setUserOpen(false)}
+              className="
+                p-4 rounded-2xl
+                text-center
+                bg-[var(--rgb-primary)]
+                text-black
+                font-bold
+                hover:scale-[1.02]
+                transition-all duration-300
+              "
+            >
+              Create Account
+            </Link>
+          </>
+        )}
+      </div>
+
+      {/* Footer */}
+      {user && (
+        <button
+          onClick={() => {
+            signOut(auth)
+            setUserOpen(false)
+          }}
+          className="
+            mt-6
+            w-full
+            p-4
+            rounded-2xl
+            bg-red-500
+            text-white
+            font-bold
+            hover:bg-red-600
+            transition-all duration-300
+          "
+        >
+          Logout
+        </button>
       )}
+    </div>
+  </div>
+)}
+     
     </nav>
   )
 }
