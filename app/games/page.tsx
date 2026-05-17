@@ -1,7 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { collection, getDocs, query, where } from "firebase/firestore"
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  limit,
+} from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -9,12 +15,14 @@ import Link from "next/link"
 
 export default function GamesPage() {
   const [games, setGames] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchGames = async () => {
       const q = query(
         collection(db, "products"),
-        where("category", "==", "Game")
+        where("category", "==", "Game"),
+        limit(24)
       )
 
       const snapshot = await getDocs(q)
@@ -25,11 +33,20 @@ export default function GamesPage() {
           ...doc.data(),
         }))
       )
+      setLoading(false)
     }
 
     fetchGames()
   }, [])
-
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+        <h1 className="text-3xl text-[var(--rgb-primary)] animate-pulse">
+          Loading Games...
+        </h1>
+      </main>
+    )
+  }
   return (
     <main className="min-h-screen bg-black text-white">
       <Navbar />
@@ -37,7 +54,7 @@ export default function GamesPage() {
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
 
-          <h1 className="text-4xl sm:text-3xl sm:text-4xl md:text-5xl md:text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[var(--rgb-primary)] neon-text mb-12">
             AAA GAMES STORE
           </h1>
 
@@ -46,10 +63,11 @@ export default function GamesPage() {
               <Link
                 key={game.id}
                 href={`/product/${game.id}`}
-                className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl overflow-hidden shadow-[0_0_25px_var(--rgb-primary)] hover:scale-105 transition-all duration-300"
+                className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl overflow-hidden shadow-[0_0_25px_var(--rgb-primary)] hover:scale-[1.03] hover:-translate-y-2 transition-all duration-300"
               >
                 <img
-                  src={game.image}
+                  loading="lazy"
+                  src={game.image || "/placeholder.png"}
                   className="w-full h-72 object-cover"
                 />
 
@@ -68,7 +86,7 @@ export default function GamesPage() {
 
                   <div className="flex justify-between items-center">
                     <span className="text-3xl font-bold text-[var(--rgb-primary)]">
-                      ${game.price}
+                      ${Number(game.price).toFixed(2)}
                     </span>
 
                     <span className="px-4 py-2 rounded-xl bg-[var(--rgb-primary)] text-black font-bold">
