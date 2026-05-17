@@ -10,37 +10,51 @@ import { useRouter } from "next/navigation"
 import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 import { useEffect } from "react"
-import { addDoc, collection, doc, updateDoc, getDoc } from "firebase/firestore"
+import {
+  addDoc,
+  collection,
+  doc,
+  updateDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { useToast } from "@/components/toast"
 import toasts from "@/config/toasts.json"
 
 
 
-
 export default function CheckoutPage() {
+  const [placingOrder, setPlacingOrder] = useState(false)
+  const router = useRouter()
+  const { showToast } = useToast()
+  const { cartItems, cartTotal, clearCart } = useCart()
+
   const [coupon, setCoupon] = useState("")
   const [discount, setDiscount] = useState(0)
-  const { showToast } = useToast()
+  const [appliedCouponId, setAppliedCouponId] = useState("")
+  const [appliedCouponCode, setAppliedCouponCode] = useState("")
   const [checkingAuth, setCheckingAuth] = useState(true)
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsLoggedIn(true)
-      } else {
-        setIsLoggedIn(false)
-      }
-
+      setIsLoggedIn(!!user)
       setCheckingAuth(false)
     })
 
     return () => unsubscribe()
   }, [])
-  const router = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const { cartItems, cartTotal } = useCart()
+
+  useEffect(() => {
+    setDiscount(0)
+    setAppliedCouponId("")
+    setAppliedCouponCode("")
+  }, [cartTotal])
+
+
 
   const [success, setSuccess] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState("card")
@@ -59,34 +73,85 @@ export default function CheckoutPage() {
   const handleChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value })
   }
-  const applyCoupon = () => {
-    if (coupon === "HYPER10") {
-      setDiscount(cartTotal * 0.1)
-      showToast("10% discount applied")
-    } else if (coupon === "GAMER20") {
-      setDiscount(cartTotal * 0.2)
-      showToast("20% discount applied")
-    } else {
-      setDiscount(0)
-      showToast("Invalid coupon")
+  const applyCoupon = async () => {
+    try {
+      if (!coupon.trim()) {
+        showToast("Enter coupon code")
+        return
+      }
+
+      const couponQuery = query(
+        collection(db, "coupons"),
+        where("code", "==", coupon.trim().toUpperCase())
+      )
+
+      const couponSnapshot = await getDocs(couponQuery)
+
+      if (couponSnapshot.empty) {
+        setDiscount(0)
+        showToast("Invalid coupon")
+        return
+      }
+
+      const couponDoc = couponSnapshot.docs[0]
+      const couponData = couponDoc.data()
+
+      if (!couponData.active) {
+        setDiscount(0)
+        showToast("Coupon is inactive")
+        return
+      }
+
+      if (
+        couponData.expiresAt &&
+        couponData.expiresAt.toDate &&
+        new Date() > couponData.expiresAt.toDate()
+      ) {
+        setDiscount(0)
+        showToast("Coupon expired")
+        return
+      }
+
+      if (cartTotal < Number(couponData.minimumOrder || 0)) {
+        setDiscount(0)
+        showToast(`Minimum order required: ${couponData.minimumOrder}`)
+        return
+      }
+
+      if (Number(couponData.usedCount || 0) >= Number(couponData.usageLimit || 1)) {
+        setDiscount(0)
+        showToast("Coupon usage limit reached")
+        return
+      }
+
+      const discountAmount =
+        (cartTotal * Number(couponData.discount)) / 100
+
+      setDiscount(discountAmount)
+
+      setAppliedCouponId(couponDoc.id)
+      setAppliedCouponCode(couponData.code)
+
+      showToast(`${couponData.discount}% coupon applied`)
+    } catch (error: any) {
+      console.log(error)
+      showToast(error.message || toasts.orderFailed)
+    } finally {
+      setPlacingOrder(false)
     }
   }
 
   const handlePurchase = async () => {
+    if (placingOrder) return
+
+    setPlacingOrder(true)
     if (!isLoggedIn) {
       showToast(toasts.loginBeforeCheckout)
       router.push("/login?redirect=/checkout")
       return
+
     }
-    if (checkingAuth) {
-      return (
-        <main className="min-h-screen bg-black text-white flex items-center justify-center">
-          <h1 className="text-3xl text-[var(--rgb-primary)]">
-            Checking login...
-          </h1>
-        </main>
-      )
-    }
+
     if (
       !formData.name ||
       !formData.email ||
@@ -154,8 +219,9 @@ export default function CheckoutPage() {
         contact: formData.contact,
         paymentMethod,
         items: orderItems,
-        total: cartTotal - discount,
+        total: Math.max(cartTotal - discount, 0),
         discount,
+        couponCode: appliedCouponCode || null,
         createdAt: new Date(),
         status: "Packed",
       })
@@ -173,12 +239,35 @@ export default function CheckoutPage() {
           })
         }
       }
+      if (appliedCouponId) {
+        const couponRef = doc(db, "coupons", appliedCouponId)
 
-      setSuccess(true)
+        const couponSnap = await getDoc(couponRef)
+
+        if (couponSnap.exists()) {
+          const couponData = couponSnap.data()
+
+          await updateDoc(couponRef, {
+            usedCount: Number(couponData.usedCount || 0) + 1,
+          })
+        }
+      }
+
+      clearCart()
+setSuccess(true)
     } catch (error: any) {
       console.log(error)
       showToast(error.message || toasts.orderFailed)
     }
+  }
+  if (checkingAuth) {
+    return (
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+        <h1 className="text-3xl text-[var(--rgb-primary)]">
+          Checking login...
+        </h1>
+      </main>
+    )
   }
 
   return (
@@ -322,9 +411,10 @@ export default function CheckoutPage() {
 
               <button
                 onClick={handlePurchase}
-                className="w-full py-4 rounded-2xl bg-[var(--rgb-primary)] text-black font-bold text-xl hover:scale-105 transition-all duration-300 shadow-[0_0_30px_var(--rgb-primary)]"
+                disabled={placingOrder}
+               className="w-full py-4 rounded-2xl bg-[var(--rgb-primary)] text-black font-bold text-xl hover:scale-105 transition-all duration-300 shadow-[0_0_30px_var(--rgb-primary)] disabled:opacity-50 disabled:hover:scale-100"
               >
-                Complete Purchase
+                {placingOrder ? "Processing..." : "Complete Purchase"}
               </button>
             </div>
           </div>
@@ -347,7 +437,7 @@ export default function CheckoutPage() {
                   <div>
                     <h3 className="font-bold text-lg">{item.name}</h3>
                     <p className="bg-[var(--rgb-primary)]/20
-">${item.price.toFixed(2)}</p>
+">${Number(item.price).toFixed(2)}</p>
                     <p className="text-gray-400">Qty: {item.quantity}</p>
                   </div>
                 </div>
@@ -358,7 +448,7 @@ export default function CheckoutPage() {
                 type="text"
                 placeholder="Coupon Code"
                 value={coupon}
-                onChange={(e) => setCoupon(e.target.value)}
+                onChange={(e) => setCoupon(e.target.value.toUpperCase())}
                 className="flex-1 bg-black border border-[var(--rgb-primary)] rounded-xl p-4 outline-none"
               />
 
@@ -375,7 +465,7 @@ export default function CheckoutPage() {
                 <span>Total</span>
                 <span className="bg-[var(--rgb-primary)]/20
 ">
-                  ${(cartTotal - discount).toFixed(2)}
+                  ${Math.max(cartTotal - discount, 0).toFixed(2)}
                 </span>
               </div>
             </div>

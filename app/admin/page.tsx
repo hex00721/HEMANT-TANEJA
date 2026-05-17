@@ -2,7 +2,10 @@
 
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Package, Users, DollarSign, ShoppingCart } from "lucide-react"
+import {
+  TicketPercent,
+} from "lucide-react"
+import { Package, Users, DollarSign, ShoppingCart, } from "lucide-react"
 import { useEffect, useState } from "react"
 import {
   addDoc,
@@ -21,6 +24,8 @@ import toasts from "@/config/toasts.json"
 import AdminChart from "@/components/admin-chart"
 import { storage } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import Link from "next/link"
+
 
 const gameImages: Record<string, string> = {
   "Cyberpunk 2077": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/capsule_616x353.jpg",
@@ -91,6 +96,7 @@ export default function AdminPage() {
     stock: "",
     file: null as File | null,
   })
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -205,15 +211,15 @@ export default function AdminPage() {
     if (
       !productForm.name ||
       !productForm.price ||
-     (!productForm.image && !productForm.file) ||
+      (!productForm.image && !productForm.file) ||
       !productForm.category
     ) {
       showToast(toasts.fillAllFields)
       return
     }
     const imageUrl = productForm.file
-  ? await uploadImage(productForm.file)
-  : productForm.image
+      ? await uploadImage(productForm.file)
+      : productForm.image
 
     const newProduct = {
       name: productForm.name,
@@ -363,12 +369,23 @@ export default function AdminPage() {
             Export Orders CSV
           </button>
 
+
+
           <button
             onClick={generateGames}
             className="mb-8 px-8 py-4 rounded-2xl bg-[var(--rgb-primary)] text-black font-bold shadow-[0_0_25px_var(--rgb-primary)]"
           >
             Generate 120 AAA Games With Posters
           </button>
+
+
+          <Link
+            href="/admin/coupons"
+            className="ml-4 inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-purple-500 text-white font-bold shadow-[0_0_25px_#a855f7] hover:scale-105 transition-all duration-300"
+          >
+            <TicketPercent className="w-5 h-5" />
+            Coupon Generator
+          </Link>
 
           <div className="bg-zinc-900 border border-[var(--rgb-primary)] rounded-3xl p-6 mb-12 shadow-[0_0_25px_var(--rgb-primary)]">
             <h2 className="text-3xl font-bold text-[var(--rgb-primary)] mb-6">
@@ -418,40 +435,40 @@ export default function AdminPage() {
                 <option value="GBP">£ GBP</option>
               </select>
               <div className="flex flex-col gap-2">
-  <label className="text-sm text-gray-400">
-    Upload Image
-  </label>
+                <label className="text-sm text-gray-400">
+                  Upload Image
+                </label>
 
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) =>
-      setGameForm({
-        ...gameForm,
-        file: e.target.files?.[0] || null,
-      })
-    }
-    className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
-  />
-</div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setGameForm({
+                      ...gameForm,
+                      file: e.target.files?.[0] || null,
+                    })
+                  }
+                  className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
+                />
+              </div>
 
-<div className="flex flex-col gap-2">
-  <label className="text-sm text-gray-400">
-    OR Image URL
-  </label>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-gray-400">
+                  OR Image URL
+                </label>
 
-  <input
-    type="text"
-    placeholder="https://example.com/image.jpg"
-    value={gameForm.image}
-    onChange={(e) =>
-      setGameForm({ ...gameForm, image: e.target.value })
-    }
-    className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
-  />
-</div>
+                <input
+                  type="text"
+                  placeholder="https://example.com/image.jpg"
+                  value={gameForm.image}
+                  onChange={(e) =>
+                    setGameForm({ ...gameForm, image: e.target.value })
+                  }
+                  className="bg-black border border-[var(--rgb-primary)] rounded-xl p-3 outline-none"
+                />
+              </div>
 
-             
+
 
               <input
                 type="text"
