@@ -8,6 +8,7 @@ import { useCart } from "@/context/cart-context"
 import { onAuthStateChanged, signOut } from "firebase/auth"
 import { auth, db } from "@/lib/firebase"
 import { doc, getDoc } from "firebase/firestore"
+import { AnimatePresence, motion } from "framer-motion"
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -57,18 +58,16 @@ export function Navbar() {
   }, [])
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-500 ${
-        scrolled
-          ? "backdrop-blur-2xl bg-black/80 border-b border-[var(--rgb-primary)] shadow-[0_0_30px_var(--rgb-primary)]"
-          : "glass-strong"
-      }`}
+    <header
+      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-500 ${scrolled
+        ? "backdrop-blur-2xl bg-black/80 border-b border-[var(--rgb-primary)] shadow-[0_0_30px_var(--rgb-primary)]"
+        : "glass-strong"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div
-          className={`flex items-center justify-between transition-all duration-500 ${
-            scrolled ? "h-16" : "h-20"
-          }`}
+          className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "h-16" : "h-20"
+            }`}
         >
           <Link
             href="/"
@@ -202,95 +201,104 @@ export function Navbar() {
         )}
       </div>
 
-      {cartOpen && (
+      <AnimatePresence>
+        {cartOpen && (
+          <motion.div
+            onClick={() => setCartOpen(false)}
+            className="fixed inset-0 z-[999999] bg-black/70 backdrop-blur-sm flex justify-end"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              className="fixed top-0 right-0 h-screen w-[90%] sm:w-full max-w-md bg-zinc-950 border-l-2 border-[var(--rgb-primary)] p-4 sm:p-6 shadow-[0_0_50px_var(--rgb-primary)] rounded-l-[30px] sm:rounded-l-[40px] flex flex-col text-white"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 260, damping: 28 }}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[var(--rgb-primary)]">
+                  Your Cart
+                </h2>
+
+                <button
+                  onClick={() => setCartOpen(false)}
+                  className="text-white hover:text-[var(--rgb-primary)] text-3xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="space-y-4 flex-1 overflow-y-auto pr-1 min-h-0">
+                {cartItems.length === 0 ? (
+                  <p className="text-gray-400">Your cart is empty.</p>
+                ) : (
+                  cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex gap-3 sm:gap-4 bg-zinc-900 p-3 sm:p-4 rounded-xl text-white"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
+                      />
+
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-sm sm:text-base truncate">
+                          {item.name}
+                        </h3>
+
+                        <p className="text-[var(--rgb-primary)]">
+                          ${Number(item.price).toFixed(2)}
+                        </p>
+
+                        <p className="text-gray-400 text-sm">
+                          Qty: {item.quantity}
+                        </p>
+
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-red-400 text-sm mt-2"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+
+                {cartItems.length > 0 && (
+                  <div className="border-t border-[var(--rgb-primary)] pt-4">
+                    <p className="text-xl sm:text-2xl font-bold text-[var(--rgb-primary)]">
+                      Total: ${Number(cartTotal).toFixed(2)}
+                    </p>
+
+                    <Link
+                      href="/checkout"
+                      onClick={() => setCartOpen(false)}
+                      className="block text-center mt-4 w-full bg-[var(--rgb-primary)] text-black py-3 rounded-xl font-bold"
+                    >
+                      Checkout
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {userOpen && (
         <div
-          onClick={() => setCartOpen(false)}
-          className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-sm flex justify-end"
+          onClick={() => setUserOpen(false)}
+          className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-md"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-[90%] sm:w-full max-w-md h-full bg-zinc-950 border-l-2 border-[var(--rgb-primary)] p-4 sm:p-6 shadow-[0_0_50px_var(--rgb-primary)] rounded-l-[30px] sm:rounded-l-[40px] overflow-y-auto"
-          >
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[var(--rgb-primary)]">
-                Your Cart
-              </h2>
-
-              <button
-                onClick={() => setCartOpen(false)}
-                className="text-white hover:text-[var(--rgb-primary)] text-3xl"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {cartItems.length === 0 ? (
-                <p className="text-gray-400">Your cart is empty.</p>
-              ) : (
-                cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex gap-3 sm:gap-4 bg-zinc-900 p-3 sm:p-4 rounded-xl"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
-                    />
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-sm sm:text-base truncate">
-                        {item.name}
-                      </h3>
-
-                      <p className="text-[var(--rgb-primary)]">
-                        ${item.price.toFixed(2)}
-                      </p>
-
-                      <p className="text-gray-400 text-sm">
-                        Qty: {item.quantity}
-                      </p>
-
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-red-400 text-sm mt-2"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-
-              {cartItems.length > 0 && (
-                <div className="border-t border-[var(--rgb-primary)] pt-4">
-                  <p className="text-xl sm:text-2xl font-bold text-[var(--rgb-primary)]">
-                    Total: ${cartTotal.toFixed(2)}
-                  </p>
-
-                  <Link
-                    href="/checkout"
-                    onClick={() => setCartOpen(false)}
-                    className="block text-center mt-4 w-full bg-[var(--rgb-primary)] text-black py-3 rounded-xl font-bold"
-                  >
-                    Checkout
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-     {userOpen && (
-  <div
-    onClick={() => setUserOpen(false)}
-    className="fixed inset-0 z-[99999] bg-black/70 backdrop-blur-md"
-  >
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="
+            className="
         fixed top-0 left-0
         h-screen
         w-[300px] sm:w-[340px]
@@ -301,22 +309,22 @@ export function Navbar() {
         flex flex-col
         animate-[slideInLeft_.35s_ease]
       "
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h2 className="text-3xl font-bold text-[var(--rgb-primary)]">
-            User Panel
-          </h2>
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-3xl font-bold text-[var(--rgb-primary)]">
+                  User Panel
+                </h2>
 
-          <p className="text-sm text-gray-400 mt-1">
-            Welcome back
-          </p>
-        </div>
+                <p className="text-sm text-gray-400 mt-1">
+                  Welcome back
+                </p>
+              </div>
 
-        <button
-          onClick={() => setUserOpen(false)}
-          className="
+              <button
+                onClick={() => setUserOpen(false)}
+                className="
             w-10 h-10
             rounded-xl
             bg-zinc-900
@@ -325,18 +333,18 @@ export function Navbar() {
             transition-all duration-300
             flex items-center justify-center
           "
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-      {/* Links */}
-      <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-1">
-        {isAdmin && (
-          <Link
-            href="/admin"
-            onClick={() => setUserOpen(false)}
-            className="
+            {/* Links */}
+            <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-1">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setUserOpen(false)}
+                  className="
               p-4 rounded-2xl
               bg-red-500
               text-white
@@ -345,15 +353,15 @@ export function Navbar() {
               hover:bg-red-600
               transition-all duration-300
             "
-          >
-            Admin Panel
-          </Link>
-        )}
+                >
+                  Admin Panel
+                </Link>
+              )}
 
-        <Link
-          href="/profile"
-          onClick={() => setUserOpen(false)}
-          className="
+              <Link
+                href="/profile"
+                onClick={() => setUserOpen(false)}
+                className="
             p-4 rounded-2xl
             bg-zinc-900
             border border-zinc-800
@@ -362,14 +370,14 @@ export function Navbar() {
             hover:text-[var(--rgb-primary)]
             transition-all duration-300
           "
-        >
-          Profile Dashboard
-        </Link>
+              >
+                Profile Dashboard
+              </Link>
 
-        <Link
-          href="/tracking"
-          onClick={() => setUserOpen(false)}
-          className="
+              <Link
+                href="/tracking"
+                onClick={() => setUserOpen(false)}
+                className="
             p-4 rounded-2xl
             bg-zinc-900
             border border-zinc-800
@@ -378,14 +386,14 @@ export function Navbar() {
             hover:text-[var(--rgb-primary)]
             transition-all duration-300
           "
-        >
-          Track Orders
-        </Link>
+              >
+                Track Orders
+              </Link>
 
-        <Link
-          href="/wishlist"
-          onClick={() => setUserOpen(false)}
-          className="
+              <Link
+                href="/wishlist"
+                onClick={() => setUserOpen(false)}
+                className="
             p-4 rounded-2xl
             bg-zinc-900
             border border-zinc-800
@@ -394,16 +402,16 @@ export function Navbar() {
             hover:text-[var(--rgb-primary)]
             transition-all duration-300
           "
-        >
-          Wishlist
-        </Link>
+              >
+                Wishlist
+              </Link>
 
-        {!user && (
-          <>
-            <Link
-              href="/login"
-              onClick={() => setUserOpen(false)}
-              className="
+              {!user && (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setUserOpen(false)}
+                    className="
                 p-4 rounded-2xl
                 text-center
                 border border-[var(--rgb-primary)]
@@ -412,14 +420,14 @@ export function Navbar() {
                 hover:text-black
                 transition-all duration-300
               "
-            >
-              Login
-            </Link>
+                  >
+                    Login
+                  </Link>
 
-            <Link
-              href="/signup"
-              onClick={() => setUserOpen(false)}
-              className="
+                  <Link
+                    href="/signup"
+                    onClick={() => setUserOpen(false)}
+                    className="
                 p-4 rounded-2xl
                 text-center
                 bg-[var(--rgb-primary)]
@@ -428,21 +436,21 @@ export function Navbar() {
                 hover:scale-[1.02]
                 transition-all duration-300
               "
-            >
-              Create Account
-            </Link>
-          </>
-        )}
-      </div>
+                  >
+                    Create Account
+                  </Link>
+                </>
+              )}
+            </div>
 
-      {/* Footer */}
-      {user && (
-        <button
-          onClick={() => {
-            signOut(auth)
-            setUserOpen(false)
-          }}
-          className="
+            {/* Footer */}
+            {user && (
+              <button
+                onClick={() => {
+                  signOut(auth)
+                  setUserOpen(false)
+                }}
+                className="
             mt-6
             w-full
             p-4
@@ -453,14 +461,14 @@ export function Navbar() {
             hover:bg-red-600
             transition-all duration-300
           "
-        >
-          Logout
-        </button>
+              >
+                Logout
+              </button>
+            )}
+          </div>
+        </div>
       )}
-    </div>
-  </div>
-)}
-     
-    </nav>
+
+    </header>
   )
 }
