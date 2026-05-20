@@ -282,26 +282,31 @@ export default function AdminPage() {
     showToast("120 AAA Games Added With Real Posters")
   }
   const updateProduct = async () => {
-
     if (!editingProduct) return
-    stock: Number(editingProduct.stock),
-      await updateDoc(doc(db, "products", editingProduct.id), {
-        name: editingProduct.name,
-        price: Number(editingProduct.price),
-        currency: editingProduct.currency,
-        image: editingProduct.image,
-        category: editingProduct.category,
-        genre: editingProduct.genre || "",
-        platform: editingProduct.platform || "",
-        description: editingProduct.description || "",
-      })
+
+    await updateDoc(doc(db, "products", editingProduct.id), {
+      name: editingProduct.name,
+      price: Number(editingProduct.price),
+      stock: Number(editingProduct.stock),
+      currency: editingProduct.currency,
+      image: editingProduct.image,
+      category: editingProduct.category,
+      genre: editingProduct.genre || "",
+      platform: editingProduct.platform || "",
+      description: editingProduct.description || "",
+    })
 
     setProducts((prev) =>
       prev.map((product) =>
-        product.id === editingProduct.id ? editingProduct : product
+        product.id === editingProduct.id
+          ? {
+            ...editingProduct,
+            price: Number(editingProduct.price),
+            stock: Number(editingProduct.stock),
+          }
+          : product
       )
     )
-
     setEditingProduct(null)
     showToast("Product updated successfully")
   }
