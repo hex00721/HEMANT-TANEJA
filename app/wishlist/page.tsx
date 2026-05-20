@@ -5,11 +5,12 @@ import { Footer } from "@/components/footer"
 import { useWishlist } from "@/context/wishlist-context"
 import { useCart } from "@/context/cart-context"
 import { Heart, ShoppingCart, Trash2 } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function WishlistPage() {
   const { wishlistItems, removeFromWishlist } = useWishlist()
   const { addToCart } = useCart()
-
+const { toast } = useToast()
   return (
     <main className="min-h-screen bg-black text-white">
       <Navbar />

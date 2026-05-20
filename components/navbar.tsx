@@ -27,8 +27,13 @@ export function Navbar() {
   const [userOpen, setUserOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  const { cartCount, cartItems, removeFromCart, cartTotal } = useCart()
-
+  const {
+    cartCount,
+    cartItems,
+    removeFromCart,
+    cartTotal,
+    clearCart,
+  } = useCart()
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser)
@@ -130,7 +135,10 @@ export function Navbar() {
             <div className="hidden md:flex items-center gap-3">
               {user ? (
                 <button
-                  onClick={() => signOut(auth)}
+                  onClick={() => {
+                    clearCart()
+                    signOut(auth)
+                  }}
                   className="px-4 py-2 rounded-xl border border-red-400 text-red-400 hover:bg-red-400 hover:text-black transition-all duration-300"
                 >
                   Logout

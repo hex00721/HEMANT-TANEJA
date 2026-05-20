@@ -11,6 +11,8 @@ import { useToast } from "@/components/toast"
 import toasts from "@/config/toasts.json"
 import { FcGoogle } from "react-icons/fc"
 
+
+
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 
 export default function LoginPage() {
@@ -34,6 +36,9 @@ export default function LoginPage() {
         email,
         password
       )
+      
+      router.push("/")
+      
 
       if (!userCredential.user.emailVerified) {
         await sendEmailVerification(userCredential.user)
@@ -62,6 +67,7 @@ export default function LoginPage() {
     try {
       const provider = new GoogleAuthProvider()
       await signInWithPopup(auth, provider)
+      router.push("/")
 
       showToast(toasts.loginSuccess)
       router.push(redirect)

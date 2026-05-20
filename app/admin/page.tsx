@@ -15,6 +15,8 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  query,
+  where,
 } from "firebase/firestore"
 import { db, auth } from "@/lib/firebase"
 import { onAuthStateChanged } from "firebase/auth"
@@ -73,6 +75,8 @@ export default function AdminPage() {
   const [checkingAdmin, setCheckingAdmin] = useState(true)
   const [orders, setOrders] = useState<any[]>([])
   const [products, setProducts] = useState<any[]>([])
+  const [showDeleteGamesModal, setShowDeleteGamesModal] = useState(false)
+  const [deleteConfirmText, setDeleteConfirmText] = useState("")
 
   const [gameForm, setGameForm] = useState({
     name: "",
@@ -82,7 +86,7 @@ export default function AdminPage() {
     genre: "",
     platform: "PC",
     description: "",
-    stock: "",
+    stock: "5",
     file: null as File | null,
   })
   const [editingProduct, setEditingProduct] = useState<any>(null)
@@ -93,7 +97,8 @@ export default function AdminPage() {
     currency: "USD",
     image: "",
     category: "Keyboard",
-    stock: "",
+
+    stock: "5",
     file: null as File | null,
   })
 
@@ -202,7 +207,7 @@ export default function AdminPage() {
       genre: "",
       platform: "PC",
       description: "",
-      stock: "",
+      stock: "5",
       file: null as File | null,
     })
   }
@@ -241,7 +246,7 @@ export default function AdminPage() {
       currency: "USD",
       image: "",
       category: "Keyboard",
-      stock: "",
+      stock: "5",
       file: null as File | null,
     })
   }
@@ -249,6 +254,36 @@ export default function AdminPage() {
   const deleteProduct = async (productId: string) => {
     await deleteDoc(doc(db, "products", productId))
     setProducts((prev) => prev.filter((product) => product.id !== productId))
+  }
+  const deleteAllGames = async () => {
+    if (deleteConfirmText !== "MEOW MEOW") {
+      showToast("Type DELETE GAMES correctly")
+      return
+    }
+
+    const gamesQuery = query(
+      collection(db, "products"),
+      where("category", "==", "Game")
+    )
+
+    const snapshot = await getDocs(gamesQuery)
+
+    if (snapshot.empty) {
+      showToast("No games found")
+      return
+    }
+
+    for (const gameDoc of snapshot.docs) {
+      await deleteDoc(doc(db, "products", gameDoc.id))
+    }
+
+    setProducts((prev) =>
+      prev.filter((product) => product.category !== "Game")
+    )
+
+    showToast("All games deleted successfully")
+    setShowDeleteGamesModal(false)
+    setDeleteConfirmText("")
   }
 
   const generateGames = async () => {
@@ -267,6 +302,7 @@ export default function AdminPage() {
         genre: "Action RPG",
         platform: "PC",
         description: `${game} premium AAA digital edition with next generation gameplay.`,
+        stock: 5,
         createdAt: new Date(),
       }
 
@@ -381,6 +417,13 @@ export default function AdminPage() {
             className="mb-8 px-8 py-4 rounded-2xl bg-[var(--rgb-primary)] text-black font-bold shadow-[0_0_25px_var(--rgb-primary)]"
           >
             Generate 120 AAA Games With Posters
+          </button>
+
+          <button
+            onClick={() => setShowDeleteGamesModal(true)}
+            className="ml-4 mb-8 px-8 py-4 rounded-2xl bg-red-600 text-white font-bold shadow-[0_0_25px_#ef4444] hover:scale-105 transition-all duration-300"
+          >
+            Delete All Games
           </button>
 
 
@@ -831,6 +874,54 @@ export default function AdminPage() {
       )}
 
       <Footer />
+      {showDeleteGamesModal && (
+  <div className="fixed inset-0 z-[999999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div className="w-full max-w-md bg-zinc-950 border border-red-500 rounded-3xl p-8 shadow-[0_0_40px_#ef4444]">
+      
+      <h2 className="text-3xl font-bold text-red-500 mb-4">
+        Delete All Games
+      </h2>
+
+      <p className="text-gray-300 mb-6">
+        This action is permanent and cannot be undone.
+      </p>
+
+      <p className="text-sm text-gray-400 mb-3">
+        Type:
+        <span className="text-red-400 font-bold ml-2">
+          PASSWORD 
+        </span>
+      </p>
+
+      <input
+        type="text"
+        value={deleteConfirmText}
+        onChange={(e) => setDeleteConfirmText(e.target.value)}
+        placeholder="Type confirmation"
+        className="w-full bg-black border border-red-500 rounded-2xl p-4 outline-none text-white mb-6"
+      />
+
+      <div className="flex gap-4">
+        <button
+          onClick={() => {
+            setShowDeleteGamesModal(false)
+            setDeleteConfirmText("")
+          }}
+          className="flex-1 py-4 rounded-2xl bg-zinc-800 text-white font-bold"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={deleteAllGames}
+          className="flex-1 py-4 rounded-2xl bg-red-600 text-white font-bold shadow-[0_0_25px_#ef4444]"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </main>
   )
 }

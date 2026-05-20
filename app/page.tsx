@@ -11,6 +11,7 @@ import { Newsletter } from "@/components/newsletter"
 import { useToast } from "@/components/toast"
 import toasts from "@/config/toasts.json"
 import { useCart } from "@/context/cart-context"
+import { toast } from "@/components/ui/use-toast"
 
 export default function HomePage() {
   const { addToCart } = useCart()
@@ -145,7 +146,10 @@ export default function HomePage() {
                     image: product.image,
                   })
 
-                  showToast(`${product.name} added to cart`)
+                  toast({
+                    title: "Added to Cart",
+                    description: `${product.name} added successfully`,
+                  })
                 }}
                 className="
           w-full
@@ -165,7 +169,7 @@ export default function HomePage() {
             </div>
           </div>
         ))}
-        
+
       </div>
 
       <FeaturedProducts />

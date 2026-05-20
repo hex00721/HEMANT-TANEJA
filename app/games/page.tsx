@@ -6,7 +6,6 @@ import {
   getDocs,
   query,
   where,
-  limit,
 } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { Navbar } from "@/components/navbar"
@@ -22,7 +21,7 @@ export default function GamesPage() {
       const q = query(
         collection(db, "products"),
         where("category", "==", "Game"),
-        limit(24)
+        
       )
 
       const snapshot = await getDocs(q)

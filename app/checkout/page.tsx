@@ -232,7 +232,7 @@ export default function CheckoutPage() {
 
         if (productSnap.exists()) {
           const productData = productSnap.data()
-          const currentStock = productData.stock ?? 0
+          const currentStock = Number(productData.stock ?? 0)
 
           await updateDoc(productRef, {
             stock: Math.max(currentStock - item.quantity, 0),
@@ -254,7 +254,7 @@ export default function CheckoutPage() {
       }
 
       clearCart()
-setSuccess(true)
+      setSuccess(true)
     } catch (error: any) {
       console.log(error)
       showToast(error.message || toasts.orderFailed)
@@ -412,7 +412,7 @@ setSuccess(true)
               <button
                 onClick={handlePurchase}
                 disabled={placingOrder}
-               className="w-full py-4 rounded-2xl bg-[var(--rgb-primary)] text-black font-bold text-xl hover:scale-105 transition-all duration-300 shadow-[0_0_30px_var(--rgb-primary)] disabled:opacity-50 disabled:hover:scale-100"
+                className="w-full py-4 rounded-2xl bg-[var(--rgb-primary)] text-black font-bold text-xl hover:scale-105 transition-all duration-300 shadow-[0_0_30px_var(--rgb-primary)] disabled:opacity-50 disabled:hover:scale-100"
               >
                 {placingOrder ? "Processing..." : "Complete Purchase"}
               </button>

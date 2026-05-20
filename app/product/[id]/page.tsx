@@ -8,10 +8,12 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useCart } from "@/context/cart-context"
 import ReviewSection from "@/components/review-section"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function ProductPage() {
   const params = useParams()
   const { addToCart } = useCart()
+const { toast } = useToast()
 
   const [product, setProduct] = useState<any>(null)
 
