@@ -56,7 +56,8 @@ export default function RootLayout({
 }>) {
   return (
 
-    <html lang="en"
+    <html lang="en" 
+    suppressHydrationWarning
       className={`${orbitron.variable} ${rajdhani.variable} bg-background`}>
       <head>
         <meta
